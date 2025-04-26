@@ -1,11 +1,17 @@
-import pygame
-import sys
+# /// script
+# dependencies = [
+#   "pygame-ce"
+# ]
+# ///
+
+import sys, asyncio
 if sys.platform == "emscripten":
     import asyncio
     import platform
     platform.window.canvas.style.imageRendering = "pixelated"
+import pygame
 
-pygame.init ()
+pygame.init()
 
 WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -39,12 +45,8 @@ ball = pygame.Rect(WIDTH // 2 - BALL_SIZE // 2,
 clock = pygame.time.Clock()
 
 # Handle the move
-running = True
-while running:
-    for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
 
+def move_paddles():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_s] and L_PADDLE.top > 0:
         L_PADDLE.y -= PADDLE_SPEED
@@ -55,6 +57,8 @@ while running:
     if keys[pygame.K_DOWN] and R_PADDLE.bottom < HEIGHT:
             R_PADDLE.y += PADDLE_SPEED
 
+def move_ball():
+    global BALL_SPEED_X, BALL_SPEED_Y
     ball.x += BALL_SPEED_X
     ball.y += BALL_SPEED_Y
 
@@ -66,17 +70,29 @@ while running:
     if ball.colliderect(L_PADDLE) or ball.colliderect(R_PADDLE):
         BALL_SPEED_X *= -1
 
+async def main():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-    screen.fill(TABLE_COLOR)
+        move_paddles()
+        move_ball()
+            
+        screen.fill(TABLE_COLOR)
 
-    pygame.draw.rect(screen, L_PADDLE_COLOR, L_PADDLE)
-    pygame.draw.rect(screen, R_PADDLE_COLOR, R_PADDLE)
-    pygame.draw.ellipse(screen, BALL_COLOR, ball)
-    pygame.draw.aaline(screen, LINE_COLOR, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT))
+        pygame.draw.rect(screen, L_PADDLE_COLOR, L_PADDLE)
+        pygame.draw.rect(screen, R_PADDLE_COLOR, R_PADDLE)
+        pygame.draw.ellipse(screen, BALL_COLOR, ball)
+        pygame.draw.aaline(screen, LINE_COLOR, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT))
 
+        pygame.display.flip()
+        pygame.time.Clock().tick(60)
         
-    pygame.display.flip()
-    clock.tick(60)
+        await asyncio.sleep(0)
 
-pygame.quit()
+
+asyncio.run(main())
+
 
