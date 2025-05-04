@@ -28,6 +28,7 @@ L_PADDLE_COLOR = (30, 30, 30)
 R_PADDLE_COLOR = (160, 40, 50)  
 
 
+
 # Set the size and speed for both the paddles and the ball
 PADDLE_WIDTH, PADDLE_HEIGHT = 20, 120
 PADDLE_SPEED = 15
@@ -90,6 +91,7 @@ async def main():
         pygame.draw.rect(screen, L_PADDLE_COLOR, L_PADDLE)
         pygame.draw.rect(screen, R_PADDLE_COLOR, R_PADDLE)
         pygame.draw.ellipse(screen, BALL_COLOR, ball)
+    
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
