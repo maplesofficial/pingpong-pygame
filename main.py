@@ -5,10 +5,15 @@
 # ///
 
 import sys, asyncio
+import os
 if sys.platform == "emscripten":
     import asyncio
     import platform
     platform.window.canvas.style.imageRendering = "pixelated"
+    ASSET_PATH = "assets"
+else:
+    ASSET_PATH = os.path.join(os.path.dirname(__file__), "assets")
+    
 import pygame
 
 pygame.init()
@@ -17,11 +22,10 @@ WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ping Pong")
 
-TABLE_COLOR = (32, 87, 129)
+TABLE = pygame.image.load(os.path.join(ASSET_PATH, "pingpong_table.png"))
 BALL_COLOR = (255, 255, 255)      
 L_PADDLE_COLOR = (30, 30, 30)       
 R_PADDLE_COLOR = (160, 40, 50)  
-LINE_COLOR = (255, 255, 255)  
 
 
 # Set the size and speed for both the paddles and the ball
@@ -80,12 +84,12 @@ async def main():
         move_paddles()
         move_ball()
             
-        screen.fill(TABLE_COLOR)
+        screen.blit(TABLE, (0, 0))
+
 
         pygame.draw.rect(screen, L_PADDLE_COLOR, L_PADDLE)
         pygame.draw.rect(screen, R_PADDLE_COLOR, R_PADDLE)
         pygame.draw.ellipse(screen, BALL_COLOR, ball)
-        pygame.draw.aaline(screen, LINE_COLOR, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT))
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
