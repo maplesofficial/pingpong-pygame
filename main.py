@@ -9,7 +9,7 @@ import os
 if sys.platform == "emscripten":
     import asyncio
     import platform
-    platform.window.canvas.style.imageRendering = "pixelated"
+    # platform.window.canvas.style.imageRendering = "pixelated"
     ASSET_PATH = "assets"
 else:
     ASSET_PATH = os.path.join(os.path.dirname(__file__), "assets")
@@ -35,7 +35,7 @@ WINNING_SCORE = 11
 
 
 class Paddle:
-    VEL = 4
+    VEL = 5
 
     def __init__(self, color, x, y, width, height):
         self.color = color
@@ -60,7 +60,7 @@ class Paddle:
         self.y = self.original_y
 
 class Ball:
-    MAX_VEL = 5
+    MAX_VEL = 6
     COLOR = BALL_COLOR
 
 
